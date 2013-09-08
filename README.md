@@ -3,6 +3,7 @@ GridExample
 
 ## Overview
 
+A grid of features with their child stories
 
 ## License
 
