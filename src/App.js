@@ -24,15 +24,19 @@ Ext.define('CustomApp', {
                                 Name: feature.get('Name'),
                                 _ref: feature.get("_ref"),
                                 StoryCount: feature.get('UserStories').Count,
+                                DefectCount: 0,
                                 UserStories: []
                             };
                             
-                            var stories = feature.getCollection('UserStories');
+                            var stories = feature.getCollection('UserStories', {fetch: ['FormattedID','Owner','Defects', 'Tasks']});
                            stories.load({
-                                fetch: ['FormattedID','Owner'],
                                 callback: function(records, operation, success){
-                                    Ext.Array.each(records, function(story){  
-                                            f.UserStories.push({_ref: story.get('_ref'),
+                                    Ext.Array.each(records, function(story){
+                                        f.DefectCount += story.get('Defects').Count;
+                                        var count = story.get('Defects').Count;
+                                        console.log('defect count',story.get('Defects').Count,  count);
+                                            f.UserStories.push({
+                                            _ref: story.get('_ref'),
                                             FormattedID: story.get('FormattedID'),
                                             Owner:  (story.get('Owner') && story.get('Owner')._refObjectName) || 'None'
                                                     });
@@ -77,6 +81,9 @@ Ext.define('CustomApp', {
                         });
                         return html.join(', ');
                     }
+                },
+                {
+                    text: 'DefectCount', dataIndex: 'DefectCount'
                 },
                 {
                     text: 'Owner', dataIndex: 'UserStories', 
