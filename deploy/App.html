@@ -39,13 +39,11 @@ Ext.define('CustomApp', {
                                 UserStories: []
                             };
                             
-                            var stories = feature.getCollection('UserStories', {fetch: ['FormattedID','Owner','Defects', 'Tasks']});
+                        var stories = feature.getCollection('UserStories', {fetch: ['FormattedID','Owner','Defects', 'Tasks']});
                            stories.load({
                                 callback: function(records, operation, success){
                                     Ext.Array.each(records, function(story){
                                         f.DefectCount += story.get('Defects').Count;
-                                        var count = story.get('Defects').Count;
-                                        console.log('defect count',story.get('Defects').Count,  count);
                                             f.UserStories.push({
                                             _ref: story.get('_ref'),
                                             FormattedID: story.get('FormattedID'),
