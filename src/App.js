@@ -5,7 +5,7 @@ Ext.define('CustomApp', {
     launch: function() {
         Ext.create('Rally.data.WsapiDataStore', {
             model: 'PortfolioItem/Feature',
-            fetch: ['FormattedID','Name','UserStories'],
+            fetch: ['FormattedID','Name','UserStories', 'Release'],
             pageSize: 100,
             autoLoad: true,
             listeners: {
@@ -22,6 +22,7 @@ Ext.define('CustomApp', {
                             var f  = {
                                 FormattedID: feature.get('FormattedID'),
                                 Name: feature.get('Name'),
+                                Release: (feature.get('Release') && feature.get('Release')._refObjectName) || 'None',
                                 _ref: feature.get("_ref"),
                                 StoryCount: feature.get('UserStories').Count,
                                 DefectCount: 0,
@@ -54,6 +55,7 @@ Ext.define('CustomApp', {
     _createGrid: function(features) {
          this.add({
             xtype: 'rallygrid',
+            //enableBulkEdit: true,
             store: Ext.create('Rally.data.custom.Store', {
                 data: features,
                 pageSize: 100
@@ -69,6 +71,9 @@ Ext.define('CustomApp', {
                 },
                 {
                     text: 'Story Count', dataIndex: 'StoryCount'
+                },
+                {
+                    text: 'Release', dataIndex: 'Release'
                 },
                 {
                     text: 'User Stories', dataIndex: 'UserStories', 
