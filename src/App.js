@@ -5,7 +5,7 @@ Ext.define('CustomApp', {
     launch: function() {
         Ext.create('Rally.data.WsapiDataStore', {
             model: 'PortfolioItem/Feature',
-            fetch: ['FormattedID','Name','UserStories', 'Release'],
+            fetch: ['FormattedID','Name','UserStories', 'Release' ,'Parent'],
             pageSize: 100,
             autoLoad: true,
             listeners: {
@@ -19,11 +19,14 @@ Ext.define('CustomApp', {
                 var features = [];
                 var pendingstories = data.length;
                 Ext.Array.each(data, function(feature) {
+                            var parent = feature.get('Parent');
+                            
                             var f  = {
                                 FormattedID: feature.get('FormattedID'),
                                 Name: feature.get('Name'),
                                 Release: (feature.get('Release') && feature.get('Release')._refObjectName) || 'None',
                                 _ref: feature.get("_ref"),
+                                Parent: (parent && parent.FormattedID) || 'None',
                                 StoryCount: feature.get('UserStories').Count,
                                 DefectCount: 0,
                                 UserStories: []
@@ -55,10 +58,10 @@ Ext.define('CustomApp', {
     _createGrid: function(features) {
          this.add({
             xtype: 'rallygrid',
-            //enableBulkEdit: true,
             store: Ext.create('Rally.data.custom.Store', {
                 data: features,
-                pageSize: 100
+                pageSize: 100,
+                remoteSort:false
             }),
             
             columnCfgs: [
@@ -74,6 +77,12 @@ Ext.define('CustomApp', {
                 },
                 {
                     text: 'Release', dataIndex: 'Release'
+                },
+                {
+                    text: 'Parent', dataIndex: 'Parent',
+                   renderer: function(parent) {
+                        return ('<a href="' + Rally.nav.Manager.getDetailUrl(parent) + '">' + parent + '</a>');
+                   }
                 },
                 {
                     text: 'User Stories', dataIndex: 'UserStories', 
