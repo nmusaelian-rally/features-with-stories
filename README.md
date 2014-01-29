@@ -1,4 +1,4 @@
-Grid Example: Features, their Story and Defect count
+Grid Example: Features, their Parent, Story and Defect count
 =========================
 
 ## Overview
